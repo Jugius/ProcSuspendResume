@@ -33,6 +33,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.btnSuspend = new System.Windows.Forms.Button();
             this.btnResume = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // txtProcessName
@@ -76,11 +77,22 @@
             this.btnResume.UseVisualStyleBackColor = true;
             this.btnResume.Click += new System.EventHandler(this.btnResume_Click);
             // 
+            // label2
+            // 
+            this.label2.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label2.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.label2.Location = new System.Drawing.Point(13, 162);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(340, 67);
+            this.label2.TabIndex = 4;
+            this.label2.Text = "Остановка/продолжение процесса висит на хоткее: Ctrl+Alt+F12";
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(365, 162);
+            this.ClientSize = new System.Drawing.Size(365, 226);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.btnResume);
             this.Controls.Add(this.btnSuspend);
             this.Controls.Add(this.label1);
@@ -101,6 +113,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btnSuspend;
         private System.Windows.Forms.Button btnResume;
+        private System.Windows.Forms.Label label2;
     }
 }
 
