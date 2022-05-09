@@ -15,9 +15,27 @@ namespace GTAProcSuspendResume
             // register the event that is fired after the key press.
             hook.KeyPressed +=
                 new EventHandler<KeyPressedEventArgs>(hook_KeyPressed);
-            // register the control + alt + F12 combination as hot key.
-            hook.RegisterHotKey(Hotkeys.ModifierKeys.Control | Hotkeys.ModifierKeys.Alt,
-                Keys.F12);
+
+            // register the control + alt + F(i) combination as hot key.            
+            int i = 12;
+            do
+            {
+                var key = GetKeyF(i);
+                if (hook.TryRegisterHotKey(Hotkeys.ModifierKeys.Control | Hotkeys.ModifierKeys.Alt, key, out _))
+                {
+                    break;
+                }
+
+                i--;
+            } while (i > 0);
+
+            if (i > 0)
+                lblHotKeyInfo.Text = "Остановка/продолжение процесса висит на хоткее: Ctrl+Alt+F" + i;
+            else
+            {
+                lblHotKeyInfo.ForeColor = System.Drawing.Color.Firebrick;
+                lblHotKeyInfo.Text = "Не удалось зарегистрировать хоткей";
+            }            
         }
 
         private void btnSuspend_Click(object sender, EventArgs e)
@@ -78,6 +96,25 @@ namespace GTAProcSuspendResume
                 throw new Exception("Не найден процесс с названием: " + name);
             return vsProcs[0];
         }
-        
+        private static System.Windows.Forms.Keys GetKeyF(int key)
+        {
+            switch (key)
+            {
+                case 1:return System.Windows.Forms.Keys.F1;
+                case 2: return System.Windows.Forms.Keys.F2;
+                case 3: return System.Windows.Forms.Keys.F3;
+                case 4: return System.Windows.Forms.Keys.F4;
+                case 5: return System.Windows.Forms.Keys.F5;
+                case 6: return System.Windows.Forms.Keys.F6;
+                case 7: return System.Windows.Forms.Keys.F7;
+                case 8: return System.Windows.Forms.Keys.F8;
+                case 9: return System.Windows.Forms.Keys.F9;
+                case 10: return System.Windows.Forms.Keys.F10;
+                case 11: return System.Windows.Forms.Keys.F11;
+                case 12: return System.Windows.Forms.Keys.F12;
+                default:
+                        throw new ArgumentOutOfRangeException("key");
+            }
+        }
     }
 }

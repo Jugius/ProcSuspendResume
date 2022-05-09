@@ -87,6 +87,31 @@ namespace GTAProcSuspendResume.Hotkeys
                 throw new InvalidOperationException("Couldn’t register the hot key.");
         }
 
+        public bool TryRegisterHotKey(ModifierKeys modifier, Keys key, out string error)
+        {
+            // increment the counter.
+            _currentId = _currentId + 1;
+            try
+            {
+                if (!RegisterHotKey(_window.Handle, _currentId, (uint)modifier, (uint)key))
+                {
+                    error = "Couldn’t register the hot key.";
+                    return false;
+                }
+                else
+                {
+                    error = string.Empty;
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                error = ex.Message;
+                return false;
+            }
+
+        }
+
         /// <summary>
         /// A hot key has been pressed.
         /// </summary>
