@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GTAProcSuspendResume
+namespace ProcSuspendResume
 {
     [Flags]
     public enum ThreadAccess : int

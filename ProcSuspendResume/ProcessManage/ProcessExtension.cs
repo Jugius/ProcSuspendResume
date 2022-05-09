@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
-namespace GTAProcSuspendResume
+namespace ProcSuspendResume
 {
     public static class ProcessExtension
     {

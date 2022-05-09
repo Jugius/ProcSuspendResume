@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-namespace GTAProcSuspendResume.Hotkeys
+namespace ProcSuspendResume.Hotkeys
 {
     public sealed class KeyboardHook : IDisposable
     {

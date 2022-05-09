@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("GTAProcSuspendResume")]
+[assembly: AssemblyTitle("ProcSuspendResume")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("GTAProcSuspendResume")]
+[assembly: AssemblyProduct("ProcSuspendResume")]
 [assembly: AssemblyCopyright("© Andrey Slusarev  2022")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

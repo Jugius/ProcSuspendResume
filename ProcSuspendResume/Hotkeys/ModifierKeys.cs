@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GTAProcSuspendResume.Hotkeys
+namespace ProcSuspendResume.Hotkeys
 {
     /// <summary>
     /// The enumeration of possible modifiers.

@@ -1,4 +1,4 @@
-﻿namespace GTAProcSuspendResume
+﻿namespace ProcSuspendResume
 {
     partial class MainWindow
     {
@@ -40,7 +40,7 @@
             // 
             this.txtProcessName.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.txtProcessName.Location = new System.Drawing.Point(178, 10);
-            this.txtProcessName.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtProcessName.Margin = new System.Windows.Forms.Padding(2);
             this.txtProcessName.Name = "txtProcessName";
             this.txtProcessName.Size = new System.Drawing.Size(88, 29);
             this.txtProcessName.TabIndex = 0;
@@ -61,7 +61,7 @@
             // 
             this.btnSuspend.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.btnSuspend.Location = new System.Drawing.Point(13, 42);
-            this.btnSuspend.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnSuspend.Margin = new System.Windows.Forms.Padding(2);
             this.btnSuspend.Name = "btnSuspend";
             this.btnSuspend.Size = new System.Drawing.Size(252, 37);
             this.btnSuspend.TabIndex = 2;
@@ -73,7 +73,7 @@
             // 
             this.btnResume.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.btnResume.Location = new System.Drawing.Point(13, 84);
-            this.btnResume.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnResume.Margin = new System.Windows.Forms.Padding(2);
             this.btnResume.Name = "btnResume";
             this.btnResume.Size = new System.Drawing.Size(252, 37);
             this.btnResume.TabIndex = 3;
@@ -104,7 +104,7 @@
             this.Controls.Add(this.txtProcessName);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
             this.Name = "MainWindow";
             this.Text = "Process Suspend and Resume";

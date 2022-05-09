@@ -1,9 +1,9 @@
-﻿using GTAProcSuspendResume.Hotkeys;
+﻿using ProcSuspendResume.Hotkeys;
 using System;
 using System.Diagnostics;
 using System.Windows.Forms;
 
-namespace GTAProcSuspendResume
+namespace ProcSuspendResume
 {
     public partial class MainWindow : Form
     {
