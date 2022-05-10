@@ -30,11 +30,11 @@ namespace ProcSuspendResume
             } while (i > 0);
 
             if (i > 0)
-                lblHotKeyInfo.Text = "Остановка/продолжение процесса висит на хоткее: Ctrl+Alt+F" + i;
+                lblHotKeyInfo.Text = "Pause/Resume of process hotkey: Ctrl+Alt+F" + i;
             else
             {
                 lblHotKeyInfo.ForeColor = System.Drawing.Color.Firebrick;
-                lblHotKeyInfo.Text = "Не удалось зарегистрировать хоткей";
+                lblHotKeyInfo.Text = "Hotkey not registered";
             }            
         }
 
@@ -48,7 +48,7 @@ namespace ProcSuspendResume
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Ошибка остановки", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ShowException(ex.Message, "Error");
             }
         }
         private void btnResume_Click(object sender, EventArgs e)
@@ -61,7 +61,7 @@ namespace ProcSuspendResume
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Ошибка возобновления", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ShowException(ex.Message, "Error");
             }
         }
         void hook_KeyPressed(object sender, KeyPressedEventArgs e)
@@ -79,21 +79,23 @@ namespace ProcSuspendResume
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Ошибка возобновления", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ShowException(ex.Message, "Error");
             }
 
             // show the keys pressed in a label.
             //label1.Text = e.Modifier.ToString() + " + " + e.Key.ToString();
         }
+        private void ShowException(string message, string caption) =>
+            MessageBox.Show(owner: this, message, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
 
         private Process GetProcess(string name)
         {
             if (string.IsNullOrEmpty(name))
-                throw new ArgumentNullException("Не указано название процесса!");
+                throw new ArgumentNullException("There is no process name in textbox!");
 
             Process[] vsProcs = Process.GetProcessesByName(name);
             if (vsProcs == null || vsProcs.Length == 0)
-                throw new Exception("Не найден процесс с названием: " + name);
+                throw new Exception("Not found process: " + name);
             return vsProcs[0];
         }
         private static System.Windows.Forms.Keys GetKeyF(int key)
