@@ -31,8 +31,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             this.txtProcessName = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.btnSuspend = new System.Windows.Forms.Button();
-            this.btnResume = new System.Windows.Forms.Button();
+            this.btnSuspendResume = new System.Windows.Forms.Button();
             this.lblHotKeyInfo = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
@@ -57,29 +56,17 @@
             this.label1.TabIndex = 1;
             this.label1.Text = "Название процесса:";
             // 
-            // btnSuspend
+            // btnSuspendResume
             // 
-            this.btnSuspend.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.btnSuspend.Location = new System.Drawing.Point(13, 42);
-            this.btnSuspend.Margin = new System.Windows.Forms.Padding(2);
-            this.btnSuspend.Name = "btnSuspend";
-            this.btnSuspend.Size = new System.Drawing.Size(252, 37);
-            this.btnSuspend.TabIndex = 2;
-            this.btnSuspend.Text = "Приостановить";
-            this.btnSuspend.UseVisualStyleBackColor = true;
-            this.btnSuspend.Click += new System.EventHandler(this.btnSuspend_Click);
-            // 
-            // btnResume
-            // 
-            this.btnResume.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.btnResume.Location = new System.Drawing.Point(13, 84);
-            this.btnResume.Margin = new System.Windows.Forms.Padding(2);
-            this.btnResume.Name = "btnResume";
-            this.btnResume.Size = new System.Drawing.Size(252, 37);
-            this.btnResume.TabIndex = 3;
-            this.btnResume.Text = "Продолжить";
-            this.btnResume.UseVisualStyleBackColor = true;
-            this.btnResume.Click += new System.EventHandler(this.btnResume_Click);
+            this.btnSuspendResume.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.btnSuspendResume.Location = new System.Drawing.Point(13, 50);
+            this.btnSuspendResume.Margin = new System.Windows.Forms.Padding(2);
+            this.btnSuspendResume.Name = "btnSuspendResume";
+            this.btnSuspendResume.Size = new System.Drawing.Size(252, 37);
+            this.btnSuspendResume.TabIndex = 2;
+            this.btnSuspendResume.Text = "Приостановить";
+            this.btnSuspendResume.UseVisualStyleBackColor = true;
+            this.btnSuspendResume.Click += new System.EventHandler(this.SuspendResumePressed);
             // 
             // lblHotKeyInfo
             // 
@@ -98,8 +85,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(274, 184);
             this.Controls.Add(this.lblHotKeyInfo);
-            this.Controls.Add(this.btnResume);
-            this.Controls.Add(this.btnSuspend);
+            this.Controls.Add(this.btnSuspendResume);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.txtProcessName);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -108,6 +94,7 @@
             this.MaximizeBox = false;
             this.Name = "MainWindow";
             this.Text = "Process Suspend and Resume";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainWindow_FormClosing);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -117,8 +104,7 @@
 
         private System.Windows.Forms.TextBox txtProcessName;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button btnSuspend;
-        private System.Windows.Forms.Button btnResume;
+        private System.Windows.Forms.Button btnSuspendResume;
         private System.Windows.Forms.Label lblHotKeyInfo;
     }
 }

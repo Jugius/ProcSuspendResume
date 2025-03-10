@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ProcSuspendResume.ProcessManage;
+using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
@@ -13,7 +14,7 @@ namespace ProcSuspendResume
         [DllImport("kernel32.dll")]
         static extern int ResumeThread(IntPtr hThread);
 
-        public static void Suspend(this Process process)
+        private static void Suspend(this Process process)
         {
             foreach (ProcessThread thread in process.Threads)
             {
@@ -25,7 +26,7 @@ namespace ProcSuspendResume
                 _ = SuspendThread(pOpenThread);
             }
         }
-        public static void Resume(this Process process)
+        private static void Resume(this Process process)
         {
             foreach (ProcessThread thread in process.Threads)
             {
@@ -37,7 +38,35 @@ namespace ProcSuspendResume
                 _ = ResumeThread(pOpenThread);
             }
         }
-        public static void Print(this Process process)
+        internal static ProcessInfo Suspend(this ProcessInfo process)
+        {
+            if (process.State == ProcessState.Suspended) return process;
+
+            Process[] vsProcs = Process.GetProcessesByName(process.Name);
+            if (vsProcs == null || vsProcs.Length == 0)
+                throw new Exception("Не найден процесс с названием: " + process.Name);
+
+            vsProcs[0].Suspend();
+            process.State = ProcessState.Suspended;
+
+            return process;
+        }
+
+        internal static ProcessInfo Resume(this ProcessInfo process)
+        {
+            if (process.State == ProcessState.Running) return process;
+
+            Process[] vsProcs = Process.GetProcessesByName(process.Name);
+            if (vsProcs == null || vsProcs.Length == 0)
+                throw new Exception("Не найден процесс с названием: " + process.Name);
+
+            vsProcs[0].Resume();
+            process.State = ProcessState.Running;
+
+            return process;
+        }
+
+        private static void Print(this Process process)
         {
             Console.WriteLine("{0,8}    {1}", process.Id, process.ProcessName);
         }

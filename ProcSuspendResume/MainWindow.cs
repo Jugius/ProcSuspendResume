@@ -1,20 +1,22 @@
 ﻿using ProcSuspendResume.Hotkeys;
+using ProcSuspendResume.ProcessManage;
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Windows.Forms;
 
 namespace ProcSuspendResume
 {
     public partial class MainWindow : Form
     {
-        private bool IsProcessSuspended = false;
-        KeyboardHook hook = new KeyboardHook();
+        private ProcessInfo currentProcess;
+        private readonly KeyboardHook hook = new KeyboardHook();
         public MainWindow()
         {
             InitializeComponent();
             // register the event that is fired after the key press.
             hook.KeyPressed +=
-                new EventHandler<KeyPressedEventArgs>(hook_KeyPressed);
+                new EventHandler<KeyPressedEventArgs>(SuspendResumePressed);
 
             // register the control + alt + F(i) combination as hot key.            
             int i = 12;
@@ -35,67 +37,74 @@ namespace ProcSuspendResume
             {
                 lblHotKeyInfo.ForeColor = System.Drawing.Color.Firebrick;
                 lblHotKeyInfo.Text = "Не удалось зарегистрировать хоткей";
-            }            
-        }
+            }
 
-        private void btnSuspend_Click(object sender, EventArgs e)
+            currentProcess = GetLastUsedProcess();
+            UpdateWindow();
+        }
+                
+        private void SuspendResumePressed(object sender, EventArgs e)
         {
             try
             {
-                var proc = GetProcess(txtProcessName.Text);
-                proc.Suspend();
-                IsProcessSuspended = true;
+                var proc = GetCurrentProcess();
+                switch (proc.State)
+                {
+                    case ProcessState.Running:
+                        this.currentProcess = proc.Suspend();
+                        break;
+                    case ProcessState.Suspended:
+                        this.currentProcess = proc.Resume();
+                        break;
+                    default:
+                        break;
+                }
+                UpdateWindow();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Ошибка остановки", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        private void btnResume_Click(object sender, EventArgs e)
+
+        private void UpdateWindow()
         {
-            try
+            if (currentProcess == null) return;
+            switch (currentProcess.State)
             {
-                var proc = GetProcess(txtProcessName.Text);
-                proc.Resume();
-                IsProcessSuspended = false;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Ошибка возобновления", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-        void hook_KeyPressed(object sender, KeyPressedEventArgs e)
-        {
-            try
-            {
-                if (IsProcessSuspended)
-                {
-                    btnResume_Click(null, null);
-                }
-                else
-                {
-                    btnSuspend_Click(null, null);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Ошибка возобновления", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                case ProcessState.Running:
+                    btnSuspendResume.Text = "Приостановить";
+                    break;
+                case ProcessState.Suspended:
+                    btnSuspendResume.Text = "Возобновить";
+                    break;
+                default:
+                    break;
             }
 
-            // show the keys pressed in a label.
-            //label1.Text = e.Modifier.ToString() + " + " + e.Key.ToString();
+            if (!string.Equals(currentProcess.Name, txtProcessName.Text, StringComparison.OrdinalIgnoreCase))
+                txtProcessName.Text = currentProcess.Name;
         }
 
-        private Process GetProcess(string name)
+        private ProcessInfo GetCurrentProcess()
         {
-            if (string.IsNullOrEmpty(name))
+            if (string.IsNullOrWhiteSpace(txtProcessName.Text))
                 throw new ArgumentNullException("Не указано название процесса!");
+
+            string name = txtProcessName.Text.Trim().ToLower();
+            if (name.EndsWith(".exe", StringComparison.OrdinalIgnoreCase))
+                name = name.Replace(".exe", "");
+
+            if (currentProcess != null && string.Equals(currentProcess.Name, name))
+                return currentProcess;
 
             Process[] vsProcs = Process.GetProcessesByName(name);
             if (vsProcs == null || vsProcs.Length == 0)
                 throw new Exception("Не найден процесс с названием: " + name);
-            return vsProcs[0];
+
+            return new ProcessInfo(name) { State = ProcessState.Running };
         }
+
         private static System.Windows.Forms.Keys GetKeyF(int key)
         {
             switch (key)
@@ -115,6 +124,21 @@ namespace ProcSuspendResume
                 default:
                         throw new ArgumentOutOfRangeException("key");
             }
+        }
+
+        private static ProcessInfo GetLastUsedProcess()
+        {
+            string path = Path.Combine(Environment.CurrentDirectory, "last");
+            if (!File.Exists(path)) return null;
+            string name = File.ReadAllText(path);
+            return new ProcessInfo(name) { State = ProcessState.Running };
+        }
+
+        private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (currentProcess == null) return;
+            string path = Path.Combine(Environment.CurrentDirectory, "last");
+            File.WriteAllText(path, currentProcess.Name);
         }
     }
 }
