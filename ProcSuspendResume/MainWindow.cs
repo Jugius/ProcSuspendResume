@@ -11,6 +11,7 @@ namespace ProcSuspendResume
     {
         private ProcessInfo currentProcess;
         private readonly KeyboardHook hook = new KeyboardHook();
+        private HotkeyOptions hotkeyOptions = null;
 
         public MainWindow()
         {
@@ -20,26 +21,8 @@ namespace ProcSuspendResume
             hook.KeyPressed +=
                 new EventHandler<KeyPressedEventArgs>(SuspendResumePressed);
 
-            // register the control + alt + F(i) combination as hot key.            
-            int i = 12;
-            do
-            {
-                var key = GetKeyF(i);
-                if (hook.TryRegisterHotKey(Hotkeys.ModifierKeys.Control | Hotkeys.ModifierKeys.Alt, key, out _))
-                {
-                    break;
-                }
-
-                i--;
-            } while (i > 0);
-
-            if (i > 0)
-                lblHotKeyInfo.Text = "Pause/Resume of process hotkey: Ctrl+Alt+F" + i;
-            else
-            {
-                lblHotKeyInfo.ForeColor = System.Drawing.Color.Firebrick;
-                lblHotKeyInfo.Text = "Hotkey not registered";
-            }
+            hotkeyOptions = hook.RegisterDefaultOptions();
+            UpdateHotkeyDescription();
 
             currentProcess = GetLastUsedProcess();
             UpdateWindow();
@@ -88,6 +71,18 @@ namespace ProcSuspendResume
             if (!string.Equals(currentProcess.Name, txtProcessName.Text, StringComparison.OrdinalIgnoreCase))
                 txtProcessName.Text = currentProcess.Name;
         }
+        private void UpdateHotkeyDescription()
+        {
+            if (this.hotkeyOptions == null)
+            {
+                lblHotKeyInfo.ForeColor = System.Drawing.Color.Firebrick;
+                lblHotKeyInfo.Text = "Hotkey not registered";
+            }
+            else
+            {
+                lblHotKeyInfo.Text = $"Pause/Resume hotkey: {hotkeyOptions}";
+            }
+        }
         private ProcessInfo GetCurrentProcess()
         {
             if (string.IsNullOrWhiteSpace(txtProcessName.Text))
@@ -109,26 +104,7 @@ namespace ProcSuspendResume
         private void ShowException(string message, string caption) =>
             MessageBox.Show(owner: this, message, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
 
-        private static Keys GetKeyF(int key)
-        {
-            switch (key)
-            {
-                case 1:return Keys.F1;
-                case 2: return Keys.F2;
-                case 3: return Keys.F3;
-                case 4: return Keys.F4;
-                case 5: return Keys.F5;
-                case 6: return Keys.F6;
-                case 7: return Keys.F7;
-                case 8: return Keys.F8;
-                case 9: return Keys.F9;
-                case 10: return Keys.F10;
-                case 11: return Keys.F11;
-                case 12: return Keys.F12;
-                default:
-                        throw new ArgumentOutOfRangeException("key");
-            }
-        }
+        
         private static ProcessInfo GetLastUsedProcess()
         {
             string path = Path.Combine(Environment.CurrentDirectory, "last");

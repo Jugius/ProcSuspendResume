@@ -72,6 +72,46 @@ namespace ProcSuspendResume.Hotkeys
             };
         }
 
+        public HotkeyOptions RegisterDefaultOptions()
+        {
+            const ModifierKeys modifier = ModifierKeys.Control | ModifierKeys.Alt;
+
+            int i = 12;
+            do
+            {
+                var key = GetKeyF(i);
+                if (TryRegisterHotKey(modifier, key, out _))
+                {
+                    return new HotkeyOptions { Modifier = modifier, Key = key };
+                }
+                i--;
+            } 
+            while (i > 0);
+
+            return null;
+        }
+
+        private static Keys GetKeyF(int key)
+        {
+            switch (key)
+            {
+                case 1: return Keys.F1;
+                case 2: return Keys.F2;
+                case 3: return Keys.F3;
+                case 4: return Keys.F4;
+                case 5: return Keys.F5;
+                case 6: return Keys.F6;
+                case 7: return Keys.F7;
+                case 8: return Keys.F8;
+                case 9: return Keys.F9;
+                case 10: return Keys.F10;
+                case 11: return Keys.F11;
+                case 12: return Keys.F12;
+                default:
+                    throw new ArgumentOutOfRangeException("key");
+            }
+        }
+
         /// <summary>
         /// Registers a hot key in the system.
         /// </summary>
