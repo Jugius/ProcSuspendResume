@@ -2,25 +2,32 @@
 using ProcSuspendResume.ProcessManage;
 using System;
 using System.Diagnostics;
-using System.IO;
 using System.Windows.Forms;
 
 namespace ProcSuspendResume
 {
     public partial class MainWindow : Form
     {
+        private readonly KeyboardHook hook;
+        private Hotkey hotkey;
         private ProcessInfo currentProcess;
-        private readonly KeyboardHook hook = new KeyboardHook();
-        private HotkeyOptions hotkeyOptions = null;
 
         public MainWindow()
         {
             InitializeComponent();
 
-            // register the event that is fired after the key press.
+            hook = new KeyboardHook();                        
             hook.KeyPressed += SuspendResumePressed;
 
-            hotkeyOptions = HotkeyOptions.LoadFromFile() ?? hook.RegisterDefaultOptions();
+            var key = Hotkey.LoadFromFile();
+            if (key != null && hook.TryRegisterHotKey(key, out _))
+            {
+                hotkey = key;
+            }
+            else
+            { 
+                hotkey = hook.RegisterDefaultHotkey();
+            }
             UpdateHotkeyDescription();
 
             currentProcess = ProcessInfo.LoadFromFile();
@@ -51,7 +58,25 @@ namespace ProcSuspendResume
             {
                 ShowException(ex.Message, errorCaption);
             }
-        }       
+        }
+        private ProcessInfo GetCurrentProcess()
+        {
+            if (string.IsNullOrWhiteSpace(txtProcessName.Text))
+                throw new Exception("There is no process name in textbox!");
+
+            string name = txtProcessName.Text.Trim().ToLower();
+            if (name.EndsWith(".exe", StringComparison.OrdinalIgnoreCase))
+                name = name.Replace(".exe", "");
+
+            if (currentProcess != null && string.Equals(currentProcess.Name, name))
+                return currentProcess;
+
+            Process[] vsProcs = Process.GetProcessesByName(name);
+            if (vsProcs == null || vsProcs.Length == 0)
+                throw new Exception("Not found process: " + name);
+
+            return new ProcessInfo(name) { State = ProcessState.Running };
+        }
         private void UpdateWindow()
         {
             if (currentProcess == null) return;
@@ -72,42 +97,17 @@ namespace ProcSuspendResume
         }
         private void UpdateHotkeyDescription()
         {
-            if (this.hotkeyOptions == null)
+            if (this.hotkey == null)
             {
                 lblHotKeyInfo.ForeColor = System.Drawing.Color.Firebrick;
                 lblHotKeyInfo.Text = "Hotkey not registered";
             }
             else
             {
-                lblHotKeyInfo.Text = $"Pause/Resume hotkey: {hotkeyOptions}";
+                lblHotKeyInfo.ForeColor = System.Drawing.Color.FromArgb(105, 105, 105);
+                lblHotKeyInfo.Text = $"Pause/Resume hotkey: {hotkey}";
             }
-        }
-        private ProcessInfo GetCurrentProcess()
-        {
-            if (string.IsNullOrWhiteSpace(txtProcessName.Text))
-                throw new Exception("There is no process name in textbox!");
-
-            string name = txtProcessName.Text.Trim().ToLower();
-            if (name.EndsWith(".exe", StringComparison.OrdinalIgnoreCase))
-                name = name.Replace(".exe", "");
-
-            if (currentProcess != null && string.Equals(currentProcess.Name, name))
-                return currentProcess;
-
-            Process[] vsProcs = Process.GetProcessesByName(name);
-            if (vsProcs == null || vsProcs.Length == 0)
-                throw new Exception("Not found process: " + name);
-
-            return new ProcessInfo(name) { State = ProcessState.Running };
-        }
-        private void ShowException(string message, string caption) =>
-            MessageBox.Show(owner: this, message, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-        
-        private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            ProcessInfo.SaveToFile(this.currentProcess);
-        }
+        }     
 
         private void Webpage_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
@@ -120,13 +120,19 @@ namespace ProcSuspendResume
         }
         private void HotkeySettings_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            var dlg = new HotKeySettings(this.hook, this.hotkeyOptions);
+            var dlg = new HotKeySettings(this.hook, this.hotkey);
             if (dlg.ShowDialog(owner: this) == DialogResult.OK)
             {
-                this.hotkeyOptions = dlg.Options;
+                this.hotkey = dlg.Hotkey;
                 UpdateHotkeyDescription();
-                HotkeyOptions.SaveToFile(this.hotkeyOptions);
+                Hotkey.SaveToFile(this.hotkey);
             }
+        }
+        private void ShowException(string message, string caption) =>
+            MessageBox.Show(owner: this, message, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            ProcessInfo.SaveToFile(this.currentProcess);
         }
     }
 }

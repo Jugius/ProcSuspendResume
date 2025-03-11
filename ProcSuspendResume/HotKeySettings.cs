@@ -9,32 +9,32 @@ namespace ProcSuspendResume
     public partial class HotKeySettings: Form
     {
         private readonly KeyboardHook hook;
-        private readonly HotkeyOptions backupOptions;
-        private HotkeyOptions currentOptions;
-        public HotkeyOptions Options => currentOptions;
+        private readonly Hotkey backupHotkey;
+        private Hotkey currentHotkey;
+        public Hotkey Hotkey => currentHotkey;
         public HotKeySettings()
         {
             InitializeComponent();
         }
 
-        public HotKeySettings(KeyboardHook hook, HotkeyOptions hotkeyOptions)
+        public HotKeySettings(KeyboardHook hook, Hotkey hotkey)
         {
             InitializeComponent();
             this.hook = hook;
-            this.backupOptions = hotkeyOptions;
-            this.currentOptions = new HotkeyOptions (hotkeyOptions.Modifier, hotkeyOptions.Key);
+            this.backupHotkey = hotkey;
+            this.currentHotkey = new Hotkey (hotkey.Modifier, hotkey.Key);
             FillForm();
         }       
 
         private void FillForm()
         {
-            chkAlt.Checked = currentOptions.Modifier.HasFlag(Hotkeys.ModifierKeys.Alt);
-            chkControl.Checked = currentOptions.Modifier.HasFlag(Hotkeys.ModifierKeys.Control);
-            chkShift.Checked = currentOptions.Modifier.HasFlag(Hotkeys.ModifierKeys.Shift);
-            txtKey.Text = currentOptions.Key == Keys.None ? "" : currentOptions.Key.ToString();
-            lblHotKeyInfo.Text = currentOptions.ToString();
+            chkAlt.Checked = currentHotkey.Modifier.HasFlag(Hotkeys.ModifierKeys.Alt);
+            chkControl.Checked = currentHotkey.Modifier.HasFlag(Hotkeys.ModifierKeys.Control);
+            chkShift.Checked = currentHotkey.Modifier.HasFlag(Hotkeys.ModifierKeys.Shift);
+            txtKey.Text = currentHotkey.Key == Keys.None ? "" : currentHotkey.Key.ToString();
+            lblHotKeyInfo.Text = currentHotkey.ToString();
         }
-        private bool TryCombineOptions(out HotkeyOptions options)
+        private bool TryCombineOptions(out Hotkey hotkey)
         {
             try
             {
@@ -47,13 +47,13 @@ namespace ProcSuspendResume
                 if (string.IsNullOrWhiteSpace(txtKey.Text)) throw new Exception("Key is required");
                 if (!Enum.TryParse(txtKey.Text, out Keys key)) throw new Exception("Can not recognize Key");
 
-                options = new HotkeyOptions((ModifierKeys)modInt, key);
+                hotkey = new Hotkey((ModifierKeys)modInt, key);
                 return true;
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                options = new HotkeyOptions();
+                hotkey = new Hotkey();
                 return false;
             }
         }
@@ -72,7 +72,7 @@ namespace ProcSuspendResume
         {
             if (!TryCombineOptions(out var options)) return;
 
-            if (options.Equals(backupOptions))
+            if (options.Equals(backupHotkey))
             {
                 this.DialogResult = DialogResult.Cancel;
                 this.Close();
@@ -84,14 +84,14 @@ namespace ProcSuspendResume
             if (hook.TryRegisterHotKey(options, out string error))
             {
                 this.DialogResult = DialogResult.OK;
-                this.currentOptions = options;
+                this.currentHotkey = options;
                 this.Close();
                 return;
             }
             else
             {
                 MessageBox.Show(error, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                hook.RegisterHotKey(this.backupOptions);
+                hook.RegisterHotKey(this.backupHotkey);
             }
         }        
     }

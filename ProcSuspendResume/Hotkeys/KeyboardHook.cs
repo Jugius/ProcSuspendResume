@@ -70,55 +70,15 @@ namespace ProcSuspendResume.Hotkeys
                 if (KeyPressed != null)
                     KeyPressed(this, args);
             };
-        }
+        }  
 
-        public HotkeyOptions RegisterDefaultOptions()
-        {
-            const ModifierKeys modifier = ModifierKeys.Control | ModifierKeys.Alt;
-
-            int i = 12;
-            do
-            {
-                var options = new HotkeyOptions(modifier, GetKeyF(i));
-                if (TryRegisterHotKey(options, out _))
-                {
-                    return options;
-                }
-                i--;
-            } 
-            while (i > 0);
-
-            return null;
-        }
-
-        private static Keys GetKeyF(int key)
-        {
-            switch (key)
-            {
-                case 1: return Keys.F1;
-                case 2: return Keys.F2;
-                case 3: return Keys.F3;
-                case 4: return Keys.F4;
-                case 5: return Keys.F5;
-                case 6: return Keys.F6;
-                case 7: return Keys.F7;
-                case 8: return Keys.F8;
-                case 9: return Keys.F9;
-                case 10: return Keys.F10;
-                case 11: return Keys.F11;
-                case 12: return Keys.F12;
-                default:
-                    throw new ArgumentOutOfRangeException("key");
-            }
-        }
-
-        public void RegisterHotKey(IHotkey hotkey)
+        public void RegisterHotKey(Hotkey hotkey)
         {
             _currentId = _currentId + 1;
             if (!RegisterHotKey(_window.Handle, _currentId, (uint)hotkey.Modifier, (uint)hotkey.Key))
                 throw new Exception($"Couldn’t register the hot key: {hotkey}");
         }
-        public bool TryRegisterHotKey(IHotkey hotkey, out string error)
+        public bool TryRegisterHotKey(Hotkey hotkey, out string error)
         {
             // increment the counter.
             _currentId = _currentId + 1;
