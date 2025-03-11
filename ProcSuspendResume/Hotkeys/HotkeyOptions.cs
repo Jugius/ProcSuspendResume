@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -12,14 +11,19 @@ namespace ProcSuspendResume.Hotkeys
 
         public override string ToString()
         {
-            var all = Enum.GetValues(typeof(ModifierKeys))
-                .Cast<ModifierKeys>().Where(a => Modifier.HasFlag(a)).ToList();
+            uint modIint = (uint)Modifier;
 
-            List<string> values = new List<string>(2);
-            if (all.Count > 0) values.Add(string.Join("+", all));
-            if (Key != Keys.None) values.Add(Key.ToString());
+            if (modIint == 0 && Key == Keys.None) return "None";
+            if (modIint == 0) return Key.ToString();
 
-            return values.Count > 0 ? string.Join("+", values) : "None";
+            var all = new List<ModifierKeys> { ModifierKeys.Control, ModifierKeys.Alt, ModifierKeys.Shift }
+                .Where(a => Modifier.HasFlag(a));
+
+            string modStr = string.Join("+", all);
+
+            if (Key == Keys.None) return modStr;
+
+            return $"{modStr}+{Key}";
         }
     }
 }
