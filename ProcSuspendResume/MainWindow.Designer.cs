@@ -89,11 +89,11 @@
             this.linkLabel1.Location = new System.Drawing.Point(10, 151);
             this.linkLabel1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.linkLabel1.Name = "linkLabel1";
-            this.linkLabel1.Size = new System.Drawing.Size(182, 19);
+            this.linkLabel1.Size = new System.Drawing.Size(66, 19);
             this.linkLabel1.TabIndex = 5;
             this.linkLabel1.TabStop = true;
-            this.linkLabel1.Text = "ProcSuspendResume Github";
-            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
+            this.linkLabel1.Text = "Webpage";
+            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.Webpage_LinkClicked);
             // 
             // btnHotkeySettings
             // 

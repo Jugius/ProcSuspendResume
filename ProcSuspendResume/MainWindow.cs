@@ -19,7 +19,6 @@ namespace ProcSuspendResume
 
             // register the event that is fired after the key press.
             hook.KeyPressed += SuspendResumePressed;
-                new EventHandler<KeyPressedEventArgs>(SuspendResumePressed);
 
             hotkeyOptions = HotkeyOptions.LoadFromFile() ?? hook.RegisterDefaultOptions();
             UpdateHotkeyDescription();
@@ -105,24 +104,18 @@ namespace ProcSuspendResume
             MessageBox.Show(owner: this, message, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
 
         
-        private static ProcessInfo GetLastUsedProcess()
-        {
-            string path = Path.Combine(Environment.CurrentDirectory, "last");
-            if (!File.Exists(path)) return null;
-            string name = File.ReadAllText(path);
-            return new ProcessInfo(name) { State = ProcessState.Running };
-        }
-
         private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
         {
             ProcessInfo.SaveToFile(this.currentProcess);
         }
 
-        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void Webpage_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             ProcessStartInfo processStartInfo
-                = new ProcessStartInfo(@"https://github.com/Jugius/ProcSuspendResume/releases");
-            processStartInfo.UseShellExecute = true;
+                = new ProcessStartInfo(@"https://oohelp.net/software/processsuspendresume")
+                {
+                    UseShellExecute = true
+                };
             Process.Start(processStartInfo);
         }
 
