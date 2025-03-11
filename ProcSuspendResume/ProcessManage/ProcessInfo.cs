@@ -1,5 +1,6 @@
 ﻿
 using System;
+using System.IO;
 
 namespace ProcSuspendResume.ProcessManage
 {
@@ -24,6 +25,22 @@ namespace ProcSuspendResume.ProcessManage
         public override int GetHashCode()
         {
             return this.Name.GetHashCode();
+        }
+
+
+        private const string FileName = "process";
+        public static ProcessInfo LoadFromFile()
+        {
+            string path = Path.Combine(Environment.CurrentDirectory, FileName);
+            if (!File.Exists(path)) return null;
+            string name = File.ReadAllText(path);
+            return new ProcessInfo(name) { State = ProcessState.Running };
+        }
+        public static void SaveToFile(ProcessInfo process)
+        {
+            if (process == null) return;
+            string path = Path.Combine(Environment.CurrentDirectory, FileName);
+            File.WriteAllText(path, process.Name);
         }
     }
 }

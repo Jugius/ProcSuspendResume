@@ -24,7 +24,7 @@ namespace ProcSuspendResume
             hotkeyOptions = hook.RegisterDefaultOptions();
             UpdateHotkeyDescription();
 
-            currentProcess = GetLastUsedProcess();
+            currentProcess = ProcessInfo.LoadFromFile();
             UpdateWindow();
         }
         private void SuspendResumePressed(object sender, EventArgs e)
@@ -115,9 +115,7 @@ namespace ProcSuspendResume
 
         private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (currentProcess == null) return;
-            string path = Path.Combine(Environment.CurrentDirectory, "last");
-            File.WriteAllText(path, currentProcess.Name);
+            ProcessInfo.SaveToFile(this.currentProcess);
         }
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
