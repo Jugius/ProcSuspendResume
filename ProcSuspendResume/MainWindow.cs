@@ -118,9 +118,8 @@ namespace ProcSuspendResume
                 };
             Process.Start(processStartInfo);
         }
-
-        private void btnHotkeySettings_Click(object sender, EventArgs e)
-        {            
+        private void HotkeySettings_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
             var dlg = new HotKeySettings(this.hook, this.hotkeyOptions);
             if (dlg.ShowDialog(owner: this) == DialogResult.OK)
             {

@@ -33,8 +33,8 @@
             this.label1 = new System.Windows.Forms.Label();
             this.btnSuspendResume = new System.Windows.Forms.Button();
             this.lblHotKeyInfo = new System.Windows.Forms.Label();
-            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
-            this.btnHotkeySettings = new System.Windows.Forms.Button();
+            this.linkWebpage = new System.Windows.Forms.LinkLabel();
+            this.linkHotkeySettings = new System.Windows.Forms.LinkLabel();
             this.SuspendLayout();
             // 
             // txtProcessName
@@ -81,39 +81,41 @@
             this.lblHotKeyInfo.Text = "Pause/Resume of rpocess hotkey";
             this.lblHotKeyInfo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // linkLabel1
+            // linkWebpage
             // 
-            this.linkLabel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Font = new System.Drawing.Font("Segoe UI", 10.2F);
-            this.linkLabel1.Location = new System.Drawing.Point(10, 151);
-            this.linkLabel1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.linkLabel1.Name = "linkLabel1";
-            this.linkLabel1.Size = new System.Drawing.Size(66, 19);
-            this.linkLabel1.TabIndex = 5;
-            this.linkLabel1.TabStop = true;
-            this.linkLabel1.Text = "Webpage";
-            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.Webpage_LinkClicked);
+            this.linkWebpage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.linkWebpage.AutoSize = true;
+            this.linkWebpage.Font = new System.Drawing.Font("Segoe UI", 10.2F);
+            this.linkWebpage.Location = new System.Drawing.Point(10, 151);
+            this.linkWebpage.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.linkWebpage.Name = "linkWebpage";
+            this.linkWebpage.Size = new System.Drawing.Size(66, 19);
+            this.linkWebpage.TabIndex = 5;
+            this.linkWebpage.TabStop = true;
+            this.linkWebpage.Text = "Webpage";
+            this.linkWebpage.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.Webpage_LinkClicked);
             // 
-            // btnHotkeySettings
+            // linkHotkeySettings
             // 
-            this.btnHotkeySettings.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.btnHotkeySettings.Location = new System.Drawing.Point(277, 142);
-            this.btnHotkeySettings.Margin = new System.Windows.Forms.Padding(2);
-            this.btnHotkeySettings.Name = "btnHotkeySettings";
-            this.btnHotkeySettings.Size = new System.Drawing.Size(39, 37);
-            this.btnHotkeySettings.TabIndex = 6;
-            this.btnHotkeySettings.Text = "HK";
-            this.btnHotkeySettings.UseVisualStyleBackColor = true;
-            this.btnHotkeySettings.Click += new System.EventHandler(this.btnHotkeySettings_Click);
+            this.linkHotkeySettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.linkHotkeySettings.AutoSize = true;
+            this.linkHotkeySettings.Font = new System.Drawing.Font("Segoe UI", 10.2F);
+            this.linkHotkeySettings.Location = new System.Drawing.Point(210, 151);
+            this.linkHotkeySettings.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.linkHotkeySettings.Name = "linkHotkeySettings";
+            this.linkHotkeySettings.Size = new System.Drawing.Size(106, 19);
+            this.linkHotkeySettings.TabIndex = 6;
+            this.linkHotkeySettings.TabStop = true;
+            this.linkHotkeySettings.Text = "Hotkey Settings";
+            this.linkHotkeySettings.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.HotkeySettings_LinkClicked);
             // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(324, 180);
-            this.Controls.Add(this.btnHotkeySettings);
-            this.Controls.Add(this.linkLabel1);
+            this.Controls.Add(this.linkHotkeySettings);
+            this.Controls.Add(this.linkWebpage);
             this.Controls.Add(this.lblHotKeyInfo);
             this.Controls.Add(this.btnSuspendResume);
             this.Controls.Add(this.label1);
@@ -137,8 +139,8 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btnSuspendResume;
         private System.Windows.Forms.Label lblHotKeyInfo;
-        private System.Windows.Forms.LinkLabel linkLabel1;
-        private System.Windows.Forms.Button btnHotkeySettings;
+        private System.Windows.Forms.LinkLabel linkWebpage;
+        private System.Windows.Forms.LinkLabel linkHotkeySettings;
     }
 }
 
