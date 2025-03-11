@@ -18,10 +18,10 @@ namespace ProcSuspendResume
             InitializeComponent();
 
             // register the event that is fired after the key press.
-            hook.KeyPressed +=
+            hook.KeyPressed += SuspendResumePressed;
                 new EventHandler<KeyPressedEventArgs>(SuspendResumePressed);
 
-            hotkeyOptions = hook.RegisterDefaultOptions();
+            hotkeyOptions = HotkeyOptions.LoadFromFile() ?? hook.RegisterDefaultOptions();
             UpdateHotkeyDescription();
 
             currentProcess = ProcessInfo.LoadFromFile();
