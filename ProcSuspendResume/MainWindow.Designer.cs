@@ -34,6 +34,7 @@
             this.btnSuspendResume = new System.Windows.Forms.Button();
             this.lblHotKeyInfo = new System.Windows.Forms.Label();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
+            this.btnHotkeySettings = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // txtProcessName
@@ -94,11 +95,24 @@
             this.linkLabel1.Text = "ProcSuspendResume Github";
             this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
             // 
+            // btnHotkeySettings
+            // 
+            this.btnHotkeySettings.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.btnHotkeySettings.Location = new System.Drawing.Point(277, 142);
+            this.btnHotkeySettings.Margin = new System.Windows.Forms.Padding(2);
+            this.btnHotkeySettings.Name = "btnHotkeySettings";
+            this.btnHotkeySettings.Size = new System.Drawing.Size(39, 37);
+            this.btnHotkeySettings.TabIndex = 6;
+            this.btnHotkeySettings.Text = "HK";
+            this.btnHotkeySettings.UseVisualStyleBackColor = true;
+            this.btnHotkeySettings.Click += new System.EventHandler(this.btnHotkeySettings_Click);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(324, 180);
+            this.Controls.Add(this.btnHotkeySettings);
             this.Controls.Add(this.linkLabel1);
             this.Controls.Add(this.lblHotKeyInfo);
             this.Controls.Add(this.btnSuspendResume);
@@ -124,6 +138,7 @@
         private System.Windows.Forms.Button btnSuspendResume;
         private System.Windows.Forms.Label lblHotKeyInfo;
         private System.Windows.Forms.LinkLabel linkLabel1;
+        private System.Windows.Forms.Button btnHotkeySettings;
     }
 }
 

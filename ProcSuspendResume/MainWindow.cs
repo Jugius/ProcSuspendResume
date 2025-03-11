@@ -125,5 +125,16 @@ namespace ProcSuspendResume
             processStartInfo.UseShellExecute = true;
             Process.Start(processStartInfo);
         }
+
+        private void btnHotkeySettings_Click(object sender, EventArgs e)
+        {            
+            var dlg = new HotKeySettings(this.hook, this.hotkeyOptions);
+            if (dlg.ShowDialog(owner: this) == DialogResult.OK)
+            {
+                this.hotkeyOptions = dlg.Options;
+                UpdateHotkeyDescription();
+                HotkeyOptions.SaveToFile(this.hotkeyOptions);
+            }
+        }
     }
 }

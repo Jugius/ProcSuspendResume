@@ -18,7 +18,7 @@ namespace ProcSuspendResume.Hotkeys
         /// </summary>
         private class Window : NativeWindow, IDisposable
         {
-            private static int WM_HOTKEY = 0x0312;
+            private static readonly int WM_HOTKEY = 0x0312;
 
             public Window()
             {
@@ -79,10 +79,10 @@ namespace ProcSuspendResume.Hotkeys
             int i = 12;
             do
             {
-                var key = GetKeyF(i);
-                if (TryRegisterHotKey(modifier, key, out _))
+                var options = new HotkeyOptions(modifier, GetKeyF(i));
+                if (TryRegisterHotKey(options, out _))
                 {
-                    return new HotkeyOptions { Modifier = modifier, Key = key };
+                    return options;
                 }
                 i--;
             } 
@@ -112,30 +112,21 @@ namespace ProcSuspendResume.Hotkeys
             }
         }
 
-        /// <summary>
-        /// Registers a hot key in the system.
-        /// </summary>
-        /// <param name="modifier">The modifiers that are associated with the hot key.</param>
-        /// <param name="key">The key itself that is associated with the hot key.</param>
-        public void RegisterHotKey(ModifierKeys modifier, Keys key)
+        public void RegisterHotKey(IHotkey hotkey)
         {
-            // increment the counter.
             _currentId = _currentId + 1;
-
-            // register the hot key.
-            if (!RegisterHotKey(_window.Handle, _currentId, (uint)modifier, (uint)key))
-                throw new InvalidOperationException("Couldn’t register the hot key.");
+            if (!RegisterHotKey(_window.Handle, _currentId, (uint)hotkey.Modifier, (uint)hotkey.Key))
+                throw new Exception($"Couldn’t register the hot key: {hotkey}");
         }
-
-        public bool TryRegisterHotKey(ModifierKeys modifier, Keys key, out string error)
+        public bool TryRegisterHotKey(IHotkey hotkey, out string error)
         {
             // increment the counter.
             _currentId = _currentId + 1;
             try
             {
-                if (!RegisterHotKey(_window.Handle, _currentId, (uint)modifier, (uint)key))
+                if (!RegisterHotKey(_window.Handle, _currentId, (uint)hotkey.Modifier, (uint)hotkey.Key))
                 {
-                    error = "Couldn’t register the hot key.";
+                    error = $"Couldn’t register the hot key: {hotkey}";
                     return false;
                 }
                 else
@@ -149,7 +140,14 @@ namespace ProcSuspendResume.Hotkeys
                 error = ex.Message;
                 return false;
             }
+        }
 
+        public void UnregisterAllHotKeys()
+        {
+            for (int i = _currentId; i > 0; i--)
+            {
+                UnregisterHotKey(_window.Handle, i);
+            }
         }
 
         /// <summary>
