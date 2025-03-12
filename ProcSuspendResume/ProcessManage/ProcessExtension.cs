@@ -44,7 +44,7 @@ namespace ProcSuspendResume
 
             Process[] vsProcs = Process.GetProcessesByName(process.Name);
             if (vsProcs == null || vsProcs.Length == 0)
-                throw new Exception("Не найден процесс с названием: " + process.Name);
+                throw new Exception("Not found process: " + process.Name);
 
             vsProcs[0].Suspend();
             process.State = ProcessState.Suspended;
@@ -58,17 +58,12 @@ namespace ProcSuspendResume
 
             Process[] vsProcs = Process.GetProcessesByName(process.Name);
             if (vsProcs == null || vsProcs.Length == 0)
-                throw new Exception("Не найден процесс с названием: " + process.Name);
+                throw new Exception("Not found process: " + process.Name);
 
             vsProcs[0].Resume();
             process.State = ProcessState.Running;
 
             return process;
-        }
-
-        private static void Print(this Process process)
-        {
-            Console.WriteLine("{0,8}    {1}", process.Id, process.ProcessName);
         }
     }
 }
